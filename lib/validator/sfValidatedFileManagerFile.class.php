@@ -45,8 +45,11 @@ class sfValidatedFileManagerFile extends sfValidatedFile
    */
   public function save($file = null, $fileMode = 0666, $create = true, $dirMode = 0777)
   {
-    $dim = array('w' => sfConfig::get("app_max_upload_dim_w"), 'h' => sfConfig::get("app_max_upload_dim_h"));
-    $this->savedName = $this->FileManager->save($this->tempName, $this->originalName, $this->type, array('dim' => $dim));
+    $options = array();
+    if(sfConfig::get("app_max_upload_dim_w") OR sfConfig::get("app_max_upload_dim_h")) {
+      $options['dim'] = array('w' => sfConfig::get("app_max_upload_dim_w"), 'h' => sfConfig::get("app_max_upload_dim_h"));
+    }
+    $this->savedName = $this->FileManager->save($this->tempName, $this->originalName, $this->type, $options);
     
     $this->size = $this->FileManager->getSize($this->savedName);
     $this->dim = $this->FileManager->getDim($this->savedName);
