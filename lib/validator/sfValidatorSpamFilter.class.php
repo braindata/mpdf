@@ -47,22 +47,23 @@ class sfValidatorSpamFilter extends sfValidatorString
     $user->setAttribute('messages', $messages);
     
     if ($percent1 > $limit && $percent2 > $limit)
-    { 
-      $user->getGuardUser()->setIsActive(false);
-      $user->getGuardUser()->save();
-      
-      sfContext::getInstance()->getMailer()->send(new sfBaseMessage("message_block_spamuser", array(
-              "sf_subject" => $user->getGuardUser(),
-              "message" => $value
-             )));
-      
-      $user->signOut();
-      
-      
-      throw new sfValidatorError($this, 'invalid', array('value' => $value));
+    {
+      $credentials = sfConfig::get('app_community_no_spammer_credentials', 'backend');
+      if(!$user->hasCredential($credentials)) {
+        $user->getGuardUser()->setIsActive(false);
+        $user->getGuardUser()->save();
+
+        sfContext::getInstance()->getMailer()->send(new sfBaseMessage("message_block_spamuser", array(
+                "sf_subject" => $user->getGuardUser(),
+                "message" => $value
+               )));
+
+        $user->signOut();
+
+        throw new sfValidatorError($this, 'invalid', array('value' => $value));
+      }
     }
  
     return $value;
   }
 }
-?>
