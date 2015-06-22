@@ -1,3 +1,6 @@
 [submodule "lib/vendor/mustache"]
 	path = lib/vendor/mustache
 	url = https://github.com/bobthecow/mustache.php.git
+[submodule "lib/vendor/dompdf"]
+	path = lib/vendor/dompdf
+	url = https://github.com/dompdf/dompdf.git
