@@ -18,6 +18,7 @@ class bdProjectBasePluginConfiguration extends sfPluginConfiguration
     define("DOMPDF_ENABLE_FONTSUBSETTING", true);
     define("DOMPDF_UNICODE_ENABLED", true);
     define("DOMPDF_ENABLE_CSS_FLOAT", true);
+    define("DOMPDF_ENABLE_REMOTE", true);
 
     // include DOMPDF's default configuration
     require_once sfConfig::get('sf_plugins_dir').DIRECTORY_SEPARATOR.'bdProjectBasePlugin/lib/vendor/dompdf/dompdf_config.inc.php';
