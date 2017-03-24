@@ -7731,8 +7731,9 @@ function Image($file,$x,$y,$w=0,$h=0,$type='',$link='',$paint=true, $constrain=t
         $y = 0;
     }
     else if ($watermark_pos == 'B') {	// Bottom of the page
+        $margin_bottom = 5; // Pagenumbers
         $x = ($this->w/2) - ($w/2);
-        $y = $this->h - $h;
+        $y = $this->h - $h - $margin_bottom;
     }
 	  else {	// default P - centred on whole page
 		$x = ($this->w/2) - ($w/2);
