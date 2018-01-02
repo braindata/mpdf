@@ -93,6 +93,10 @@ class bdArrayToXML {
       }
     }
 
+    if (is_object($arr)){
+      $arr = (array) $arr;
+    }
+
     //create subnodes using recursion
     if(is_array($arr)){
       // recurse to get the node for that key
@@ -130,10 +134,6 @@ class bdArrayToXML {
 
     // after we are done with all the keys in the array (if it is one)
     // we check if it has any text value, if yes, append it.
-
-    if (is_object($arr)){
-      $arr = (array) $arr;
-    }
 
     if(!is_array($arr)) {
       $node->appendChild($xml->createTextNode(self::bool2str($arr)));
