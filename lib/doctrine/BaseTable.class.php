@@ -65,6 +65,12 @@ class BaseTable extends Doctrine_Table {
     return $q;
   }
 
+  public function getBaseTranslations(Doctrine_Query $q) {
+    $rootAlias = $q->getRootAlias();
+    $q->leftJoin(sprintf("%s.Translation t ON %s.id = t.id", $rootAlias, $rootAlias));
+    return $q;
+  }
+
   public function getDataAreaItem($dataarea, $key, $value) {
     $q = $this->createQuery('i')
       ->where('dataareaid = ? ', $dataarea)
