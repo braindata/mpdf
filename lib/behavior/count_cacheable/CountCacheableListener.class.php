@@ -14,7 +14,7 @@ class CountCacheableListener extends Doctrine_Record_Listener
     $invoker = $event->getInvoker();
     foreach ($this->_options['relations'] as $relation => $options)
     {
-      $table = Doctrine::getTable($options['className']);
+      $table = Doctrine_Core::getTable($options['className']);
       $relation = $table->getRelation($options['foreignAlias']);
  
       $table
@@ -31,7 +31,7 @@ class CountCacheableListener extends Doctrine_Record_Listener
     $invoker = $event->getInvoker();
     foreach ($this->_options['relations'] as $relation => $options)
     {
-      $table = Doctrine::getTable($options['className']);
+      $table = Doctrine_Core::getTable($options['className']);
       $relation = $table->getRelation($options['foreignAlias']);
  
       $table
@@ -47,12 +47,12 @@ class CountCacheableListener extends Doctrine_Record_Listener
   {
     foreach ($this->_options['relations'] as $relation => $options)
     {
-      $table = Doctrine::getTable($options['className']);
+      $table = Doctrine_Core::getTable($options['className']);
       $relation = $table->getRelation($options['foreignAlias']);
  
       $q = clone $event->getQuery();
       $q->select($relation['foreign']);
-      $ids = $q->execute(array(), Doctrine::HYDRATE_NONE);
+      $ids = $q->execute(array(), Doctrine_Core::HYDRATE_NONE);
  
       foreach ($ids as $id)
       {
