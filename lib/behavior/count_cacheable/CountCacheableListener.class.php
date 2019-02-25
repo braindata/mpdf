@@ -37,12 +37,16 @@ class CountCacheableListener extends Doctrine_Record_Listener
     {
       $table = Doctrine_Core::getTable($options['className']);
       $relation = $table->getRelation($options['foreignAlias']);
+
+      $id_field = $relation['local'];
+      $foreign_field = $relation['foreign'];
+      $foreign_id = $invoker->get($foreign_field);
  
       $table
         ->createQuery()
         ->update()
         ->set($options['columnName'], $options['columnName'].' - 1')
-        ->where($relation['local'].' = ?', $invoker->$relation['foreign'])
+        ->where($id_field.' = ?', $foreign_id)
         ->execute();
     }
   }
