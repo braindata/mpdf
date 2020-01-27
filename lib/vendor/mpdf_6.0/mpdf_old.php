@@ -86,7 +86,7 @@ if (!defined('PHP_VERSION_ID')) {
     define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
 }
 
-class mPDF
+class mPDF_old
 {
 
 ///////////////////////////////
@@ -1190,8 +1190,8 @@ function mPDF($mode='',$format='A4',$default_font_size=0,$default_font='',$mgl=1
 
 /*-- HTML-CSS --*/
 
-	if (!class_exists('cssmgr', false)) { include(_MPDF_PATH .'classes/cssmgr.php'); }
-	$this->cssmgr = new cssmgr($this);
+	if (!class_exists('cssmgrOld', false)) { include(_MPDF_PATH .'classes/cssmgr.php'); }
+	$this->cssmgr = new cssmgrOld($this);
 	// mPDF 6
 	if (file_exists(_MPDF_PATH.'mpdf.css')) {
 		$css = file_get_contents(_MPDF_PATH.'mpdf.css');

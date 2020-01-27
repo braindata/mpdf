@@ -1,6 +1,6 @@
 <?php
 
-class cssmgr {
+class cssmgrOld {
 
 var $mpdf = null;
 
@@ -10,7 +10,7 @@ var $CSS;
 var $tbCSSlvl;
 
 
-function cssmgr(&$mpdf) {
+function cssmgrOld(&$mpdf) {
 	$this->mpdf = $mpdf;
 	$this->tablecascadeCSS = array();
 	$this->CSS=array();
@@ -1130,18 +1130,20 @@ function MergeCSS($inherit,$tag,$attr) {
 	$zp = array(); 
 
 	$classes = array();
-	if (isset($attr['CLASS'])) {
+	if (is_array($attr) && isset($attr['CLASS'])) {
 		$classes = preg_split('/\s+/',$attr['CLASS']);
 	}
-	if (!isset($attr['ID'])) { $attr['ID']=''; }
+	if (is_array($attr) && !isset($attr['ID'])) { $attr['ID']=''; }
 	// mPDF 6
 	$shortlang = '';
-	if (!isset($attr['LANG'])) { $attr['LANG']=''; }
-	else { 
-		$attr['LANG'] = strtolower($attr['LANG']); 
-		if (strlen($attr['LANG']) == 5) {
-			$shortlang = substr($attr['LANG'],0,2);
-		}
+	if (is_array($attr) && !isset($attr['LANG'])) { $attr['LANG']=''; }
+	else {
+	  if (is_array($attr)){
+      $attr['LANG'] = strtolower($attr['LANG']);
+      if (strlen($attr['LANG']) == 5) {
+        $shortlang = substr($attr['LANG'],0,2);
+      }
+    }
 	}
 	//===============================================
 /*-- TABLES --*/
