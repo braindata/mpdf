@@ -171,6 +171,7 @@ class mPDF
 	var $dpi;
 	var $watermarkImgAlphaBlend;
 	var $watermarkImgBehind;
+
 	var $justifyB4br;
 	var $packTableData;
 	var $pgsIns;
@@ -358,6 +359,7 @@ class mPDF
 	var $checkCJK;
 
 	var $watermarkImgAlpha;
+  var $watermarkImages = array();
 	var $PDFAXwarnings;
 	var $MetadataRoot;
 	var $OutputIntentRoot;
@@ -8640,7 +8642,7 @@ class mPDF
 		}
 	}
 
-	function Image($file, $x, $y, $w = 0, $h = 0, $type = '', $link = '', $paint = true, $constrain = true, $watermark = false, $shownoimg = true, $allowvector = true)
+	function Image($file, $x, $y, $w = 0, $h = 0, $type = '', $link = '', $paint = true, $constrain = true, $watermark = false, $shownoimg = true, $allowvector = true, $watermark_size="P", $watermark_pos="F")
 	{
 		$orig_srcpath = $file;
 		$this->GetFullPath($file);
@@ -8689,18 +8691,18 @@ class mPDF
 			$maxh = $this->h;
 			// Size = D PF or array
 			if (is_array($this->watermark_size)) {
-				$w = $this->watermark_size[0];
-				$h = $this->watermark_size[1];
+        $w = $watermark_size[0];
+        $h = $watermark_size[1];
 			} elseif (!is_string($this->watermark_size)) {
-				$maxw -= $this->watermark_size * 2;
-				$maxh -= $this->watermark_size * 2;
+				$maxw -= $watermark_size[0] * 2;
+				$maxh -= $watermark_size[1] * 2;
 				$w = $maxw;
 				$h = abs($w * $info['h'] / $info['w']);
 				if ($h > $maxh) {
 					$h = $maxh;
 					$w = abs($h * $info['w'] / $info['h']);
 				}
-			} elseif ($this->watermark_size == 'F') {
+			} elseif ($watermark_size == 'F') {
 				if ($this->ColActive) {
 					$maxw = $this->w - ($this->DeflMargin + $this->DefrMargin);
 				} else {
@@ -8713,7 +8715,7 @@ class mPDF
 					$h = $maxh;
 					$w = abs($h * $info['w'] / $info['h']);
 				}
-			} elseif ($this->watermark_size == 'P') { // Default P
+			} elseif ($watermark_size == 'P') { // Default P
 				$w = $maxw;
 				$h = abs($w * $info['h'] / $info['w']);
 				if ($h > $maxh) {
@@ -8731,10 +8733,10 @@ class mPDF
 				$w = abs($h * $info['w'] / $info['h']);
 			}
 			// Position
-			if (is_array($this->watermark_pos)) {
-				$x = $this->watermark_pos[0];
-				$y = $this->watermark_pos[1];
-			} elseif ($this->watermark_pos == 'F') { // centred on printable area
+			if (is_array($watermark_pos)) {
+				$x = $watermark_pos[0];
+				$y = $watermark_pos[1];
+			} elseif ($watermark_pos == 'F') { // centred on printable area
 				if ($this->ColActive) { // *COLUMNS*
 					if (($this->mirrorMargins) && (($this->page) % 2 == 0)) {
 						$xadj = $this->DeflMargin - $this->DefrMargin;
@@ -8748,7 +8750,13 @@ class mPDF
 					$x = ($this->lMargin + ($this->pgwidth) / 2) - ($w / 2);
 				} // *COLUMNS*
 				$y = ($this->tMargin + ($this->h - ($this->tMargin + $this->bMargin)) / 2) - ($h / 2);
-			} else { // default P - centred on whole page
+			} else if ($watermark_pos == 'T') {	// Top of the page
+        $x = ($this->w/2) - ($w/2);
+        $y = 0;
+      } else if ($watermark_pos == 'B') {	// Bottom of the page
+        $x = ($this->w/2) - ($w/2);
+        $y = $this->h - $h;
+      } else { // default P - centred on whole page
 				$x = ($this->w / 2) - ($w / 2);
 				$y = ($this->h / 2) - ($h / 2);
 			}
@@ -13248,7 +13256,7 @@ class mPDF
 		$this->SetAlpha(1);
 	}
 
-	function watermarkImg($src, $alpha = 0.2)
+	function watermarkImg($src, $alpha = 0.2, $size = "D", $pos = "F" )
 	{
 		if ($this->PDFA || $this->PDFX) {
 			throw new MpdfException('PDFA and PDFX do not permit transparency, so mPDF does not allow Watermarks!');
@@ -13258,7 +13266,9 @@ class mPDF
 		} else {
 			$this->SetAlpha($alpha, $this->watermarkImgAlphaBlend);
 		}
-		$this->Image($src, 0, 0, 0, 0, '', '', true, true, true);
+		$this->Image(
+		  $src, 0, 0, 0, 0, '', '',
+      true, true, true,true,true, $size, $pos);
 		if (!$this->watermarkImgBehind) {
 			$this->SetAlpha(1);
 		}
@@ -15612,11 +15622,17 @@ class mPDF
 
 	function SetWatermarkImage($src, $alpha = -1, $size = 'D', $pos = 'F')
 	{
-		if ($alpha >= 0)
-			$this->watermarkImageAlpha = $alpha;
-		$this->watermarkImage = $src;
-		$this->watermark_size = $size;
-		$this->watermark_pos = $pos;
+    $watermarkImageAlpha = $alpha;
+    $watermarkImage = $src;
+    $watermark_size = $size;
+    $watermark_pos = $pos;
+
+    $this->watermarkImages[] = array(
+      "watermarkImageAlpha" => $watermarkImageAlpha,
+      "watermarkImage"      => $watermarkImage,
+      "watermark_size"      => $watermark_size,
+      "watermark_pos"       => $watermark_pos
+    );
 	}
 
 	/* -- END WATERMARK -- */
@@ -15723,9 +15739,12 @@ class mPDF
 		if (($this->watermarkText) && ($this->showWatermarkText)) {
 			$this->watermark($this->watermarkText, 45, 120, $this->watermarkTextAlpha); // Watermark text
 		}
-		if (($this->watermarkImage) && ($this->showWatermarkImage)) {
-			$this->watermarkImg($this->watermarkImage, $this->watermarkImageAlpha); // Watermark image
-		}
+
+    if (count($this->watermarkImages) && ($this->showWatermarkImage)) {
+      foreach ($this->watermarkImages as $image){
+        $this->watermarkImg( $image['watermarkImage'], $image['watermarkImageAlpha'], $image['watermark_size'], $image['watermark_pos']);	// Watermark image
+      }
+    }
 		/* -- END WATERMARK -- */
 	}
 
