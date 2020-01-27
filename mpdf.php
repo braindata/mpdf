@@ -66,7 +66,7 @@ require_once _MPDF_PATH . 'classes/myanmar.php'; // mPDF 6.0
 require_once _MPDF_PATH . 'classes/sea.php'; // mPDF 6.0
 /* -- END OTL -- */
 
-require_once _MPDF_PATH . 'Tag.php';
+require_once _MPDF_PATH . 'MpdfTag.php';
 require_once _MPDF_PATH . 'MpdfException.php';
 
 if (!defined('_JPGRAPH_PATH')) {
@@ -1361,7 +1361,7 @@ class mPDF
 			$this->StartProgressBarOutput($this->progressBar);
 		} // *PROGRESS-BAR*
 
-		$this->tag = new Tag($this);
+		$this->tag = new MpdfTag($this);
 	}
 
 	function _setPageSize($format, &$orientation)
