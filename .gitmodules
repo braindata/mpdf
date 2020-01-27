@@ -4,3 +4,6 @@
 [submodule "lib/vendor/dompdf"]
 	path = lib/vendor/dompdf
 	url = https://github.com/dompdf/dompdf.git
+[submodule "lib/vendor/mpdf"]
+	path = lib/vendor/mpdf
+	url = https://github.com/mpdf/mpdf.git
