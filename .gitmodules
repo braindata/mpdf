@@ -6,7 +6,7 @@
 	url = https://github.com/dompdf/dompdf.git
 [submodule "lib/vendor/mpdf"]
 	path = lib/vendor/mpdf
-	url = https://github.com/mpdf/mpdf.git
+	url = git@github.com:braindata/mpdf.git
 [submodule "lib/vendor/fpdi"]
 	path = lib/vendor/fpdi
 	url = https://github.com/Setasign/FPDI.git
