@@ -6385,8 +6385,8 @@ class mPDF
 			/* -- END TABLES -- */
 			$ipaddingL = $this->blk[$this->blklvl]['padding_left'];
 			$ipaddingR = $this->blk[$this->blklvl]['padding_right'];
-			$paddingL = ($ipaddingL * _MPDFK);
-			$paddingR = ($ipaddingR * _MPDFK);
+			$paddingL = ((float) $ipaddingL * _MPDFK);
+			$paddingR = ((float) $ipaddingR * _MPDFK);
 			$this->cMarginL = $this->blk[$this->blklvl]['border_left']['w'];
 			$this->cMarginR = $this->blk[$this->blklvl]['border_right']['w'];
 
