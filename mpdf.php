@@ -8694,8 +8694,8 @@ class mPDF
         $w = $watermark_size[0];
         $h = $watermark_size[1];
 			} elseif (!is_string($this->watermark_size)) {
-				$maxw -= $watermark_size[0] * 2;
-				$maxh -= $watermark_size[1] * 2;
+				$maxw -= (float) $watermark_size[0] * 2;
+				$maxh -= (float) $watermark_size[1] * 2;
 				$w = $maxw;
 				$h = abs($w * $info['h'] / $info['w']);
 				if ($h > $maxh) {
